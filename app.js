@@ -52,24 +52,23 @@ function addTodo() {
 
   // — Schedule alert —
   if (todo.dueDate && todo.dueTime) {
-    const dt   = new Date(`${todo.dueDate}T${todo.dueTime}`);
+    const dt = new Date(`${todo.dueDate}T${todo.dueTime}`);
     const diff = dt - new Date();
     if (diff > 0) {
       setTimeout(() => {
-          // Request permission if not granted already
-          if (Notification.permission === 'default') {
-              Notification.requestPermission().then(permission => {
-                  if (permission === 'granted') {
-                      showNotificationAndPlaySound(todo);
-                    }
-                  });
-              } else if (Notification.permission === 'granted') {
-                  // If permission already granted, just show notification and play sound
-                  showNotificationAndPlaySound(todo);
-              }
-          }, diff);
-      }
+        if (Notification.permission === 'default') {
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              showNotificationAndPlaySound(todo);
+            }
+          });
+        } else if (Notification.permission === 'granted') {
+          showNotificationAndPlaySound(todo);
+        }
+      }, diff);
+    }
   }
+  
   
   }
   
@@ -233,13 +232,17 @@ function startInlineEdit(li, idx, todo) {
 }
 
 function showNotificationAndPlaySound(todo) {
-  new Notification(`Reminder: It's time for your task: "${todo.text}`);
+  new Notification("Reminder", {
+    body: `It's time for your task: "${todo.text}"`,
+    icon: "icons\icon.png" // optional icon file
+  });
 
-  const reminderSound = new Audio('sounds/simple-notification-152054.mp3');
+  const reminderSound = new Audio('sounds/bell-notification.wav');
   reminderSound.play().catch(err => {
-      console.error("Error playing sound:", err);
+    console.error("Notification sound failed:", err);
   });
 }
+
 
 
 // — Utilities —
@@ -265,6 +268,17 @@ function saveTodos() {
 function loadTodos() {
   return JSON.parse(localStorage.getItem('todos') || '[]');
 }
+
+
+if (Notification.permission === 'default') {
+  Notification.requestPermission().then(permission => {
+    if (permission !== 'granted') {
+      alert("Enable notifications to receive task reminders.");
+    }
+  });
+}
+
+
 // Apply saved theme on page load
 window.addEventListener("DOMContentLoaded", () => {
   const savedTheme = localStorage.getItem("theme");
