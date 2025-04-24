@@ -51,13 +51,90 @@ header h1 { font-size: 2.5rem; color: var(--accent); }
 
 /* Form */
 .todo-form {
-  display: grid; grid-template-columns: 1fr auto auto auto; gap: 10px;
+  display: grid;
+  gap: 15px; /* Increased gap for better spacing */
+  padding: 20px; /* Added padding to the form */
+  border-radius: 8px; /* Optional: rounded corners for the form */
 }
-.todo-form input, .todo-form select {
-  padding: 10px; border: 1px solid var(--muted);
-  border-radius: 6px; background: var(--bg); color: var(--text);
+
+.task-title-container {
+  grid-column: 1 / -1; /* Full width */
 }
-.todo-form .btn {
+
+.task-title-input {
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 12px;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.date-time-priority-container {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Space between date/time and selector */
+  margin-bottom: 10px; /* Space below date/time and selector */
+}
+
+.date-time-container {
+  display: flex;
+  gap: 10px;
+}
+
+.date-input,
+.time-input {
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 10px;
+  font-size: 0.9rem;
+}
+
+.priority-select {
+  border: 1px solid var(--accent);
+  border-radius: 20px; /* Sleek rounded style */
+  background: var(--bg);
+  color: var(--text);
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid var(--accent);
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23a3a3b5" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position-x: 95%;
+  background-position-y: center;
+  padding-right: 25px;
+  height: 36px; /* Adjust height as needed */
+  width: 80px; /* Tiny width */
+}
+
+.task-description-container {
+  grid-column: 1 / -1; /* Full width */
+}
+
+.task-description-input {
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 12px;
+  width: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  resize: vertical;
+  min-height: 100px; /* Adjust as needed */
+  font-size: 1rem;
+}
+
+.add-button-container {
+  justify-self: end; /* Bottom right */
+}
+
+.add-button-container .btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -68,15 +145,17 @@ header h1 { font-size: 2.5rem; color: var(--accent); }
   font-size: 1rem;
   border: none;
   border-radius: 50px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.todo-form .btn-icon {
+
+.add-button-container .btn-icon {
   width: 16px;
   height: 16px;
 }
-.todo-form .btn:hover {
+
+.add-button-container .btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   opacity: 0.9;
