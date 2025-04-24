@@ -201,7 +201,7 @@ function startInlineEdit(li, idx, todo) {
 
   content.innerHTML = `
     <input type="text" class="edit-text" value="${taskText}" />
-    <textarea class\="edit\-description" placeholder\="${taskDescription}"</textarea>
+    <textarea class\="edit\-description" placeholder\="Task Description"</textarea>
     <select class="edit-priority">
       <option value="low"${taskPriority === 'low' ? 'selected' : ''}>Low</option>
       <option value="medium"${taskPriority === 'medium' ? 'selected' : ''}>Medium</option>
