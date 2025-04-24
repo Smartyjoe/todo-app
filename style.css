@@ -73,8 +73,7 @@ header h1 { font-size: 2.5rem; color: var(--accent); }
 
 .date-time-priority-container {
   display: flex;
-  grid-column: 1 / -1;
-  align-items: stretch;
+  align-items: center;
   gap: 20px; /* Space between date/time and selector */
   margin-bottom: 10px; /* Space below date/time and selector */
 }
@@ -161,7 +160,6 @@ header h1 { font-size: 2.5rem; color: var(--accent); }
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   opacity: 0.9;
 }
-
 
 
 /* Controls */
