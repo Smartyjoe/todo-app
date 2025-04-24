@@ -51,7 +51,8 @@
   
   /* Form */
   .todo-form {
-    display: grid;
+    display: grid; grid-template-columns: 1fr auto auto auto; gap: 10px;
+}
     gap: 15px; /* Increased gap for better spacing */
     padding: 20px; /* Added padding to the form */
     border-radius: 8px; /* Optional: rounded corners for the form */
