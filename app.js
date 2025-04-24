@@ -1,4 +1,5 @@
 // — DOM Elements —
+const voiceButton = document.getElementById('voice-button');
 const form         = document.getElementById('todo-form');
 const todoInput    = document.getElementById('todo-input');
 const prioritySel  = document.getElementById('priority-select');
@@ -13,6 +14,102 @@ const emptyState   = document.getElementById('empty-state');
 const progressBar  = document.getElementById('progress-bar');
 const progressText = document.getElementById('progress-text');
 const themeBtn     = document.getElementById('theme-btn');
+
+// voice control
+let recognition;
+let isListening = false;
+
+// Function to start voice recognition
+function startVoiceRecognition() {
+  recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = 'en-US';
+  recognition.continuous = false;
+
+  recognition.onstart = () => {
+    isListening = true;
+    console.log('Voice recognition started...');
+  };
+
+  recognition.onresult = async (event) => {
+    const transcript = event.results[0][0].transcript;
+    console.log('Transcript:', transcript);
+
+    // Send transcript to the backend for AI processing
+    try {
+      const response = await fetch('/api/process-voice', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ transcript }),
+      });
+
+      const taskData = await response.json();
+      console.log('Processed Task Data:', taskData);
+
+      // Populate the form with the extracted data
+      if (taskData.title) taskTitleInput.value = taskData.title;
+      if (taskData.description) taskDescInput.value = taskData.description;
+      if (taskData.priority) taskPriorityInput.value = taskData.priority;
+      if (taskData.dueDate) taskDateInput.value = taskData.dueDate;
+      if (taskData.dueTime) taskTimeInput.value = taskData.dueTime;
+
+      // Optionally auto-submit the form
+      form.submit();
+    } catch (error) {
+      console.error('Error processing voice command:', error);
+    }
+  };
+
+  recognition.onerror = (event) => {
+    console.error('Voice recognition error:', event.error);
+    isListening = false;
+  };
+
+  recognition.onend = () => {
+    isListening = false;
+    console.log('Voice recognition ended...');
+  };
+
+  recognition.start();
+}
+
+// Function to listen for "hey todo"
+function listenForTrigger() {
+  const triggerPhrase = 'hey todo';
+  const recognitionTrigger = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognitionTrigger.lang = 'en-US';
+  recognitionTrigger.continuous = false;
+
+  recognitionTrigger.onresult = (event) => {
+    const triggerTranscript = event.results[0][0].transcript.toLowerCase().trim();
+    console.log('Trigger command:', triggerTranscript);
+
+    if (triggerTranscript === triggerPhrase) {
+      console.log('Trigger phrase detected. Starting voice recognition...');
+      startVoiceRecognition();
+    }
+  };
+
+  recognitionTrigger.start();
+}
+
+// Start listening for "hey todo" when the page loads
+window.onload = () => {
+  listenForTrigger();
+};
+
+// Toggle voice recognition on button click
+voiceButton.addEventListener('click', () => {
+  if (!isListening) {
+    startVoiceRecognition();
+  } else {
+    recognition.stop();
+    isListening = false;
+  }
+});
+//voice control
+
 
 let allTodos = loadTodos();
 let filteredTodos = [];
