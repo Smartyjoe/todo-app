@@ -283,6 +283,24 @@ input:checked ~ .todo-content .todo-text {
 @media(max-width:600px){
   .todo-form, .controls {
     grid-template-columns: 1fr;
+    gap: 15px
+  }
+}
+
+.date-time-priority-container {
+    flex-direction: column; /* Stack date, time, and priority vertically */
+    align-items: stretch; /* Make them take full width */
+    gap: 15px; /* Adjust spacing */
+  }
+
+  .date-time-container {
+    flex-direction: column; /* Stack date and time vertically */
+    align-items: stretch; /* Make them take full width */
+    gap: 10px; /* Adjust spacing */
+  }
+
+  .priority-select {
+    width: 100%; /* Make the select full width */
   }
 }
 
