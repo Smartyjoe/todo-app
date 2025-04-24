@@ -42,125 +42,175 @@
     cursor: pointer;
   }
   
-  .wrapper {
-    max-width: 700px; margin: 0 auto 40px;
-    padding: 20px; background: var(--card);
-    border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    display: flex; flex-direction: column; gap: 20px;
-  }
-  
-  /* Form */
-  .todo-form {
-    display: grid; grid-template-columns: 1fr auto auto auto; gap: 10px;
+  /* Existing wrapper styles remain the same */
+.wrapper {
+  max-width: 700px; 
+  margin: 0 auto 40px;
+  padding: 20px; 
+  background: var(--card);
+  border-radius: 12px; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  display: flex; 
+  flex-direction: column; 
+  gap: 20px;
 }
-    gap: 15px; /* Increased gap for better spacing */
-    padding: 20px; /* Added padding to the form */
-    border-radius: 8px; /* Optional: rounded corners for the form */
+
+/* Form grid layout */
+.todo-form {
+  display: grid;
+  gap: 15px;
+  padding: 20px;
+}
+
+.task-title-container {
+  grid-column: 1 / -1; /* Full width */
+}
+
+.task-title-input {
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 12px;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.priority-select {
+  border: 1px solid var(--accent);
+  border-radius: 6px; /* Sleek rounded style */
+  background: var(--bg);
+  color: var(--text);
+  padding: 10px;
+  font-size: 0.9rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid var(--accent);
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23a3a3b5" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position-x: 95%;
+  background-position-y: center;
+  padding-right: 25px;
+  height: 36px; /* Adjust height as needed */
+  width: 80px; /* Tiny width */
+}
+
+.task-description-container {
+  grid-column: 1 / -1; /* Full width */
+}
+
+.task-description-input {
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 12px;
+  width: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  resize: vertical;
+  min-height: 100px; /* Adjust as needed */
+  font-size: 1rem;
+}
+
+.add-button-container {
+  justify-self: end; /* Bottom right */
+}
+
+.add-button-container .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--accent);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.add-button-container .btn-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.add-button-container .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  opacity: 0.9;
+}
+
+/* Responsive adjustments for form elements */
+.date-time-priority-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.date-time-container {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  min-width: 250px; /* Minimum width before wrapping */
+}
+
+.date-input,
+.time-input {
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 10px;
+  font-size: 0.9rem;
+}
+
+.priority-select {
+  min-width: 100px;
+  width: auto;
+  flex: 0 0 auto;
+  /* Keep existing styles, but remove fixed width */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .wrapper {
+      padding: 15px;
+      margin-bottom: 20px;
   }
-  
-  .task-title-container {
-    grid-column: 1 / -1; /* Full width */
-  }
-  
-  .task-title-input {
-    border: 1px solid var(--accent);
-    border-radius: 6px;
-    background: var(--bg);
-    color: var(--text);
-    padding: 12px;
-    width: 100%;
-    font-size: 1rem;
-  }
-  
-  .date-time-priority-container {
-    display: flex;
-    align-items: center;
-    gap: 20px; /* Space between date/time and selector */
-    margin-bottom: 10px; /* Space below date/time and selector */
-  }
-  
+
   .date-time-container {
-    display: flex;
-    gap: 10px;
+      flex-direction: column;
+      min-width: unset;
+      width: 100%;
   }
-  
-  .date-input,
-  .time-input {
-    border: 1px solid var(--accent);
-    border-radius: 6px;
-    background: var(--bg);
-    color: var(--text);
-    padding: 10px;
-    font-size: 0.9rem;
+
+  .date-time-priority-container {
+      gap: 10px;
   }
-  
+
   .priority-select {
-    border: 1px solid var(--accent);
-    border-radius: 6px; /* Sleek rounded style */
-    background: var(--bg);
-    color: var(--text);
-    padding: 10px;
-    font-size: 0.9rem;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    border: 1px solid var(--accent);
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%23a3a3b5" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-    background-repeat: no-repeat;
-    background-position-x: 95%;
-    background-position-y: center;
-    padding-right: 25px;
-    height: 36px; /* Adjust height as needed */
-    width: 80px; /* Tiny width */
+      width: 100%;
   }
-  
-  .task-description-container {
-    grid-column: 1 / -1; /* Full width */
-  }
-  
-  .task-description-input {
-    border: 1px solid var(--accent);
-    border-radius: 6px;
-    background: var(--bg);
-    color: var(--text);
-    padding: 12px;
-    width: 100%;
-    font-family: 'Segoe UI', sans-serif;
-    resize: vertical;
-    min-height: 100px; /* Adjust as needed */
-    font-size: 1rem;
-  }
-  
+
   .add-button-container {
-    justify-self: end; /* Bottom right */
+      width: 100%;
   }
-  
+
   .add-button-container .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    background: var(--accent);
-    color: var(--text);
-    font-weight: 600;
-    font-size: 1rem;
-    border: none;
-    border-radius: 50px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+      width: 100%;
+      justify-content: center;
   }
-  
-  .add-button-container .btn-icon {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .add-button-container .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    opacity: 0.9;
-  }
+}
+
+/* Existing input/button styles remain the same */
   
   
   /* Controls */
