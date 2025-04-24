@@ -18,21 +18,32 @@
 
   <div class="wrapper">
     <form id="todo-form" class="todo-form">
-      <input id="todo-input" type="text" placeholder="Add a new task…" autocomplete="off" />
-      <select id="priority-select">
-        <option value="low">Low</option>
-        <option value="medium" selected>Medium</option>
-        <option value="high">High</option>
-      </select>
-      <input id="due-date-input" type="date" />
-      <input id="due-time-input" type="time" step="1" value="00:00:00"/>
-      <button type="submit" class="btn">
-        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <span>Add Task</span>
-      </button>
-    </form>
+  <div class="task-title-container">
+    <input id="todo-input" type="text" placeholder="Add a new task…" autocomplete="off" class="task-title-input" />
+  </div>
+  <div class="date-time-priority-container">
+    <div class="date-time-container">
+      <input id="due-date-input" type="date" class="date-input" />
+      <input id="due-time-input" type="time" step="1" value="00:00:00" class="time-input" />
+    </div>
+    <select id="priority-select" class="priority-select">
+      <option value="low">Low</option>
+      <option value="medium" selected>Medium</option>
+      <option value="high">High</option>
+    </select>
+  </div>
+  <div class="task-description-container">
+    <textarea id="task-description" placeholder="Task description" class="task-description-input"></textarea>
+  </div>
+  <div class="add-button-container">
+    <button type="submit" class="btn">
+      <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Add Task</span>
+    </button>
+  </div>
+</form>
 
     <div class="controls">
       <input id="search-input" type="text" placeholder="🔍 Search tasks…" />
