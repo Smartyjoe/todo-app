@@ -4,6 +4,7 @@ const todoInput    = document.getElementById('todo-input');
 const prioritySel  = document.getElementById('priority-select');
 const dueDateInput = document.getElementById('due-date-input');
 const dueTimeInput = document.getElementById('due-time-input');
+const taskDescriptionInput = document.getElementById('task-description');
 const searchInput  = document.getElementById('search-input');
 const filterSelect = document.getElementById('filter-select');
 const sortSelect   = document.getElementById('sort-select');
@@ -33,11 +34,13 @@ sortSelect.addEventListener('change',  applyFilters);
 function addTodo() {
   const text    = todoInput.value.trim();
   const dueTime = dueTimeInput.value;
+  const description = taskDescriptionInput.value.trim();
 
   if (!text) return;
 
   const todo = {
     text,
+    description,
     completed: false,
     priority: prioritySel.value,
     dueDate:  dueDateInput.value  || null,
@@ -80,12 +83,12 @@ function applyFilters() {
   const sortBy = sortSelect.value;
 
   filteredTodos = allTodos
-    .filter(t => t.text.toLowerCase().includes(term))
-    .filter(t =>
-      stat === 'all' ||
-      (stat === 'completed' && t.completed) ||
-      (stat === 'pending'   && !t.completed)
-    );
+  .filter(t => t.text.toLowerCase().includes(term) || (t.description && t.description.toLowerCase().includes(term)))
+  .filter(t =>
+    stat === 'all' ||
+    (stat === 'completed' && t.completed) ||
+    (stat === 'pending'   && !t.completed)
+  );
 
   // Priority sort: High→Medium→Low→undefined
   if (sortBy === 'priority') {
@@ -138,6 +141,7 @@ function createTodoItem(todo, idx) {
     </label>
     <div class="todo-content">
       <span class="todo-text">${todo.text}</span>
+      ${todo.description ? `<small class="todo-description">${todo.description}</small>` : ''}
       <small class="priority-label priority-${todo.priority ?? 'undefined'}">
         Priority: ${capitalize(todo.priority)}
       </small>
@@ -190,12 +194,14 @@ function startInlineEdit(li, idx, todo) {
 
   // Ensure values are available, fallback to empty strings if undefined
   const taskText = todo.text || '';
+  const taskDescription = todo.description || '';
   const taskPriority = todo.priority || 'low';
   const taskDate = todo.dueDate || '';
   const taskTime = todo.dueTime || '';
 
   content.innerHTML = `
     <input type="text" class="edit-text" value="${taskText}" />
+    <textarea class\="edit\-description" placeholder\="Task Description"\></span>{taskDescription}</textarea>
     <select class="edit-priority">
       <option value="low"${taskPriority === 'low' ? 'selected' : ''}>Low</option>
       <option value="medium"${taskPriority === 'medium' ? 'selected' : ''}>Medium</option>
@@ -212,11 +218,13 @@ function startInlineEdit(li, idx, todo) {
 
   content.querySelector('.save-btn').addEventListener('click', () => {
     const nt = content.querySelector('.edit-text').value.trim();
+    const ndesc = content.querySelector('.edit-description').value.trim();
     const np = content.querySelector('.edit-priority').value;
     const nd = content.querySelector('.edit-due').value || null;
     const ntm = content.querySelector('.edit-time').value || null;
 
     if (nt) allTodos[idx].text = nt;
+    allTodos[idx].description = ndesc;
     allTodos[idx].priority = np;
     allTodos[idx].dueDate = nd;
     allTodos[idx].dueTime = ntm;
