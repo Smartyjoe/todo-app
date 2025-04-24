@@ -328,3 +328,130 @@ function showFeedbackMessage(message, color = '#00bfa6') {
     feedback.style.display = 'none';
   }, 1000);
 }
+
+//voice ai input codes
+// In your app.js
+
+const todoInput = document.getElementById('todo-input'); // You might repurpose this or have a separate voice input UI element
+const dueDateInput = document.getElementById('due-date-input');
+const dueTimeInput = document.getElementById('due-time-input');
+const prioritySel = document.getElementById('priority-select');
+const taskDescriptionInput = document.getElementById('task-description');
+const form = document.getElementById('todo-form'); // Assuming you'll submit the form after voice processing
+
+let recognition;
+
+function startVoiceRecognition() {
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.continuous = false; // Listen for a single command
+    recognition.interimResults = false; // Only return final results
+    recognition.lang = 'en-US'; // You can make this user-configurable
+
+    recognition.onstart = () => {
+      console.log('🎤 Voice recognition started...');
+      // Optionally provide visual feedback to the user
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript.toLowerCase();
+      console.log('🗣️ Voice captured:', transcript);
+      // Send the transcript to the backend for AI processing
+      sendTranscriptToServer(transcript);
+      recognition.stop();
+    };
+
+    recognition.onerror = (event) => {
+      console.error('❌ Voice recognition error:', event.error);
+      // Optionally provide error feedback to the user
+      recognition.stop();
+    };
+
+    recognition.onend = () => {
+      console.log('🛑 Voice recognition ended.');
+      // Optionally restart listening or provide a button to trigger again
+    };
+
+    recognition.start();
+  } else {
+    console.warn('Browser does not support Speech Recognition.');
+    // Optionally provide a fallback UI (e.g., a text input)
+  }
+}
+
+// Start listening for voice command after the app loads
+window.addEventListener('load', () => {
+  console.log('App loaded, starting voice recognition...');
+  startVoiceRecognition();
+});
+
+async function sendTranscriptToServer(transcript) {
+  try {
+    const response = await fetch('/api/process-voice', { // Backend endpoint for voice processing
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ transcript }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('🤖 AI processed data:', data);
+    // Populate the form fields with the AI-enhanced data
+    populateFormFromAI(data);
+
+  } catch (error) {
+    console.error('Failed to send transcript to server:', error);
+    // Optionally provide error feedback to the user
+  }
+}
+
+function populateFormFromAI(aiData) {
+  todoInput.value = aiData.title || '';
+  dueDateInput.value = aiData.dueDate || '';
+  dueTimeInput.value = aiData.dueTime || '00:00:00'; // Set a default if not provided
+  prioritySel.value = aiData.priority || 'medium'; // Set a default if not provided
+  taskDescriptionInput.value = aiData.description || '';
+
+  // Optionally, you can automatically submit the form after populating
+  form.dispatchEvent(new Event('submit'));
+}
+
+//server.js file
+// In your server.js
+
+// ... (other imports and setup)
+
+app.post('/api/process-voice', async (req, res) => {
+  const { transcript } = req.body;
+  console.log('Received voice transcript:', transcript);
+
+  try {
+    // --- Integrate with an AI/NLU service here ---
+    // Example using OpenAI (you'll need to install the openai package: npm install openai)
+    const openai = new OpenAI({ apiKey: 'YOUR_OPENAI_API_KEY' }); // Replace with your actual API key
+
+    const prompt = `Extract the task title, due date (YYYY-MM-DD), due time (HH:MM:SS), priority (low, medium, high), and description from the following natural language command: "${transcript}". If any information is not present, leave the corresponding field empty or use a default value where appropriate. Respond in JSON format.`;
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo", // Or another suitable model
+      messages: [{ role: "user", content: prompt }],
+      response_format: { type: "json_object" },
+    });
+
+    const aiData = JSON.parse(completion.choices[0].message.content);
+    console.log('AI extracted data:', aiData);
+    res.json(aiData);
+
+  } catch (error) {
+    console.error('Error processing voice with AI:', error);
+    res.status(500).json({ error: 'Failed to process voice command.' });
+  }
+});
+
+// ... (rest of your server code)
+
